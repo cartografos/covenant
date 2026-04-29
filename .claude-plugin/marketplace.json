@@ -1,0 +1,21 @@
+{
+  "name": "cartografos",
+  "owner": {
+    "name": "Cartografos",
+    "email": "marcoogalicia@icloud.com"
+  },
+  "plugins": [
+    {
+      "name": "covenant",
+      "description": "Spec-Driven Development pipeline — from PRD to specification, implementation plan, and delivery with rigorous quality gates and language-aware rules",
+      "version": "1.1.0",
+      "author": {
+        "name": "Cartografos"
+      },
+      "source": {
+        "source": "github",
+        "repo": "cartografos/covenant"
+      }
+    }
+  ]
+}

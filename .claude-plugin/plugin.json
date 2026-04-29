@@ -1,0 +1,7 @@
+{
+  "name": "covenant",
+  "version": "1.2.0",
+  "description": "Spec-Driven Development pipeline — from PRD to specification, implementation plan, and delivery with rigorous quality gates and language-aware rules",
+  "repository": "cartografos/covenant",
+  "commands": ["./commands/"]
+}
