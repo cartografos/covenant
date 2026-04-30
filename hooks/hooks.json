@@ -1,9 +1,16 @@
 {
-  "hooks": [
-    {
-      "event": "SessionStart",
-      "command": "node ./hooks/detect.js",
-      "timeout": 5000
-    }
-  ]
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "startup",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node ./hooks/detect.js",
+            "timeout": 5
+          }
+        ]
+      }
+    ]
+  }
 }
