@@ -59,7 +59,7 @@ Read every file listed in the `Mandatory Reading` table in `00-overview.md` befo
 | 2.1 | {name} | Phase 2 | Phase 1 complete |
 | ... | ... | ... | ... |
 
-**Post-implementation**: arbiter → librarian → delivery checklist
+**Post-implementation**: arbiter + oracle + prophet (parallel) → juridical → librarian → delivery checklist
 ```
 
 Ask: **"Ready to start implementation? (y/n)"**
@@ -131,6 +131,8 @@ If the plan marks two phases as parallel (e.g., "Phase 3 parallel with Phase 4")
 ---
 
 ## Post-Implementation: Review Pass
+
+**MANDATORY CHECKPOINT — DO NOT SKIP.** All steps are complete. The implementation phase is over. You MUST now proceed through the full review pipeline below: arbiter + oracle + prophet → juridical → librarian → delivery checklist. Do not present a final summary or ask the user for next steps until every review phase has run.
 
 After all steps are complete, run three review agents in parallel:
 
