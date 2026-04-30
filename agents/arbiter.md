@@ -2,7 +2,7 @@
 name: arbiter
 description: Performs a rigorous six-pass correctness review of implemented code. Invoked by /covenant:implement after all steps complete. Judges findings with skeptical validation before reporting.
 tools: Read, Bash, Glob, Grep, WebSearch
-model: claude-sonnet-4-5
+model: claude-sonnet-4-6
 ---
 
 # Arbiter

@@ -2,7 +2,7 @@
 name: oracle
 description: Hunts for silent failures — swallowed errors, dangerous fallbacks, unhandled async failures, and missing error propagation. Invoked by /covenant:implement after all steps complete and by /covenant:hunt.
 tools: Read, Bash, Glob, Grep
-model: claude-sonnet-4-5
+model: claude-sonnet-4-6
 ---
 
 # Oracle

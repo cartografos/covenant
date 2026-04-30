@@ -2,7 +2,7 @@
 name: juridical
 description: Spec conformance auditor — verifies that every requirement in the spec was implemented correctly, completely, and without deviation. Invoked by /covenant:implement after review agents complete.
 tools: Read, Bash, Glob, Grep
-model: claude-sonnet-4-5
+model: claude-sonnet-4-6
 ---
 
 # Juridical

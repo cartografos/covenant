@@ -2,7 +2,7 @@
 name: prophet
 description: Performance reviewer — finds N+1 queries, O(n²) loops, unnecessary allocations, missing indexes, blocking I/O in hot paths, and missing caching opportunities. Invoked by /covenant:implement after all steps complete.
 tools: Read, Bash, Glob, Grep, WebSearch
-model: claude-sonnet-4-5
+model: claude-sonnet-4-6
 ---
 
 # Prophet

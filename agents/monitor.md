@@ -2,7 +2,7 @@
 name: monitor
 description: Explores and investigates codebases. Finds where things live, how they connect, and what patterns are in use. Invoked by /covenant:explore or directly when deep codebase investigation is needed.
 tools: Read, Bash, Glob, Grep
-model: claude-haiku-4-5
+model: claude-sonnet-4-6
 ---
 
 # Monitor

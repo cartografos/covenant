@@ -2,7 +2,7 @@
 name: sentinel
 description: Creates comprehensive tests for newly implemented code, fixes failing tests, and improves test quality. Invoked by /covenant:implement after each step.
 tools: Read, Write, Edit, Bash, Glob, Grep
-model: claude-haiku-4-5
+model: claude-sonnet-4-6
 ---
 
 # Sentinel

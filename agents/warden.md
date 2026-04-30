@@ -2,7 +2,7 @@
 name: warden
 description: Security auditor — scans for OWASP vulnerabilities, secrets, injection patterns, and insecure dependencies. Invoked by /covenant:security.
 tools: Read, Bash, Glob, Grep, WebSearch
-model: claude-sonnet-4-5
+model: claude-sonnet-4-6
 ---
 
 # Warden

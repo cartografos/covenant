@@ -2,7 +2,7 @@
 name: catalog
 description: Deep code researcher — traces history, validates assumptions, maps hidden dependencies, and synthesizes findings into evidence-backed conclusions. Invoked by /covenant:research.
 tools: Read, Bash, Glob, Grep
-model: claude-sonnet-4-5
+model: claude-sonnet-4-6
 ---
 
 # Catalog

@@ -2,7 +2,7 @@
 name: engineer
 description: Fixes build errors, type errors, and compiler/linter failures with minimal, surgical changes. No refactoring. No style opinions. Just makes the build pass.
 tools: Read, Edit, Bash, Glob, Grep
-model: claude-sonnet-4-5
+model: claude-sonnet-4-6
 ---
 
 # Engineer

@@ -2,7 +2,7 @@
 name: architect
 description: Designs architecture for new features or systems. Analyzes existing codebase patterns, proposes 2-3 approaches with concrete tradeoffs, and produces an actionable blueprint. Invoked by /covenant:design.
 tools: Read, Bash, Glob, Grep, WebSearch
-model: claude-sonnet-4-5
+model: claude-sonnet-4-6
 ---
 
 # Architect

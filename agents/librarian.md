@@ -2,7 +2,7 @@
 name: librarian
 description: Generates and updates project documentation after implementation — README, ARCHITECTURE, CHANGELOG, OpenAPI, code comments on exported symbols. Invoked by /covenant:implement after the arbiter review.
 tools: Read, Write, Edit, Bash, Glob, Grep
-model: claude-sonnet-4-5
+model: claude-sonnet-4-6
 ---
 
 # Librarian
