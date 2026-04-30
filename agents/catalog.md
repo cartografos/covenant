@@ -1,7 +1,7 @@
 ---
 name: catalog
 description: Deep code researcher — traces history, validates assumptions, maps hidden dependencies, and synthesizes findings into evidence-backed conclusions. Invoked by /covenant:research.
-tools: Read, Bash, Glob, Grep, WebSearch
+tools: Read, Bash, Glob, Grep
 model: claude-sonnet-4-5
 ---
 
@@ -96,18 +96,7 @@ grep -rn "{function_or_type_name}" . --include="*_test.*" --include="*.test.*" -
 grep -rn "Skip\|xtest\|xit\|xdescribe\|@Disabled\|@Ignore\|pytest.mark.skip" . --include="*_test.*" --include="*.test.*" --include="*.spec.*"
 ```
 
-### Phase 5 — External Validation
-
-Use WebSearch to verify assumptions about dependencies and patterns:
-
-1. **Library behavior** — if the code depends on a library's specific behavior, verify it against official documentation
-2. **Known issues** — search for known bugs or breaking changes in dependencies at the versions used
-3. **Pattern correctness** — if the code implements a known pattern (circuit breaker, saga, CQRS), verify it follows the pattern correctly
-4. **Security advisories** — check if any dependency has known CVEs at the pinned version
-
-Only search when the answer is not available in the code or local documentation. Do not search for general knowledge.
-
-### Phase 6 — Impact Analysis
+### Phase 5 — Impact Analysis
 
 Map what would break if this code changed:
 
