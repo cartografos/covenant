@@ -77,39 +77,40 @@ Do NOT guess. A plan built on assumptions fails during implementation.
 
 ## Phase 2 — EXPLORE: Deep Codebase Analysis
 
-Search the codebase in eight categories. For each, use Grep, Glob, and Read — capture real file paths and line numbers.
+Launch the `catalog` agent to perform deep codebase investigation. Catalog handles the eight search categories and five traces below — do not duplicate this work manually.
 
-### Search Categories
+```
+Subagent: catalog
+Question: "Investigate how this codebase implements features similar to {feature being planned}. Map patterns, conventions, contracts, and dependencies in the relevant area."
+Mode: full
+Scope: {packages, modules, or directories relevant to the feature}
+Goal: Produce a complete discovery table covering: similar implementations, naming conventions, error handling, logging, type definitions, test patterns, configuration, and dependencies. Include five traces: entry points, data flow, state changes, contracts, and architectural patterns. Every finding must include file:line references and real code snippets.
+```
 
-1. **Similar Implementations** — Find features that resemble what we are building. Look for analogous packages, handlers, services, or components.
+### What Catalog Investigates
 
-2. **Naming Conventions** — How are files, types, functions, variables, constants, and exported symbols named in this area?
+**Eight Search Categories:**
 
-3. **Error Handling** — How are errors created, wrapped, propagated, and returned in similar code paths? What error types are used?
+1. **Similar Implementations** — Features that resemble what we are building
+2. **Naming Conventions** — File, type, function, variable naming in this area
+3. **Error Handling** — Error creation, wrapping, propagation, and return patterns
+4. **Logging Patterns** — What gets logged, at what level, in what format
+5. **Type Definitions** — Relevant types, interfaces, and schemas
+6. **Test Patterns** — How similar features are tested
+7. **Configuration** — Config files, env vars, feature flags
+8. **Dependencies** — Packages, internal libraries, external APIs
 
-4. **Logging Patterns** — What gets logged, at what level, in what format? What fields are always included?
+**Five Traces:**
 
-5. **Type Definitions** — Where are relevant types, interfaces, and schemas defined? How are they organized and exported?
-
-6. **Test Patterns** — How are similar features tested? What is the test file naming convention? How is setup/teardown handled? What assertion style is used?
-
-7. **Configuration** — What config files, environment variables, or feature flags are relevant? How is config parsed and validated?
-
-8. **Dependencies** — What packages, internal libraries, or external APIs are used by similar features?
-
-### Codebase Analysis (Five Traces)
-
-Read relevant files to trace:
-
-1. **Entry Points** — How does a request or action enter the system and reach the area being modified?
-2. **Data Flow** — How does data move through the relevant code paths?
-3. **State Changes** — What state is mutated, where, and under what conditions?
-4. **Contracts** — What interfaces, APIs, or protocols must be honored by the new code?
-5. **Patterns** — What architectural patterns are in use (repository, service layer, middleware, etc.)?
+1. **Entry Points** — How requests reach the area being modified
+2. **Data Flow** — How data moves through relevant code paths
+3. **State Changes** — What state is mutated, where, and under what conditions
+4. **Contracts** — Interfaces, APIs, or protocols the new code must honor
+5. **Patterns** — Architectural patterns in use
 
 ### Unified Discovery Table
 
-Compile all findings into one reference table:
+After catalog completes, compile findings into one reference table:
 
 | Category | File:Lines | Pattern | Key Snippet |
 |---|---|---|---|
@@ -117,21 +118,28 @@ Compile all findings into one reference table:
 | Error Handling | `pkg/errors/errors.go:15-30` | Sentinel errors + wrapping | `var ErrNotFound = errors.New(...)` |
 | ... | ... | ... | ... |
 
+If catalog surfaces contradictions, hidden risks, or undocumented assumptions, carry them forward into Phase 4 (DESIGN) as constraints.
+
 ---
 
 ## Phase 3 — RESEARCH: External Knowledge
 
-If the feature involves external libraries, APIs, or unfamiliar technology:
+If the feature involves external libraries, APIs, or unfamiliar technology, launch catalog again with a targeted scope:
 
-1. Search the web for official documentation
-2. Find usage examples and best practices
-3. Identify version-specific gotchas or known issues
+```
+Subagent: catalog
+Question: "What are the best practices, known issues, and version-specific gotchas for {library/API/technology}?"
+Mode: assumption
+Scope: {specific dependency or external system}
+Goal: Validate assumptions about external dependencies. Check official docs, known breaking changes, and CVEs at the pinned version. Report findings with sources.
+```
 
 Format each finding as:
 ```
 KEY_INSIGHT: {what you learned}
 APPLIES_TO: {which part of the plan this affects}
 GOTCHA: {warnings or version-specific issues}
+SOURCE: {URL or documentation reference}
 ```
 
 If the feature uses only well-understood internal patterns, skip this phase and note: "No external research needed — feature uses established internal patterns."

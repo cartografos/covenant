@@ -9,7 +9,7 @@ argument-hint: "<path/to/.covenant/plans/{name}/>"
 
 The SessionStart hook injects detected language and absolute rule file paths into the session context. Look for the `[Covenant]` block — read every file listed under `Rule files:` before proceeding. If no block is present, skip.
 
-Execute an implementation plan produced by `/covenant:plan`. Each step is implemented and immediately verified by `sentinel`. After all steps, `arbiter` runs a six-pass correctness review, then `librarian` updates all documentation.
+Execute an implementation plan produced by `/covenant:plan`. Each step is implemented and immediately verified by `sentinel`. After all steps, `arbiter`, `oracle`, and `prophet` run in parallel (correctness, silent failures, and performance), then `librarian` updates all documentation.
 
 ---
 
@@ -132,9 +132,9 @@ If the plan marks two phases as parallel (e.g., "Phase 3 parallel with Phase 4")
 
 ## Post-Implementation: Review Pass
 
-After all steps are complete, run two review agents in parallel:
+After all steps are complete, run three review agents in parallel:
 
-### Launch arbiter + oracle (parallel)
+### Launch arbiter + oracle + prophet (parallel)
 
 ```
 Subagent: arbiter
@@ -154,9 +154,18 @@ Context:
 Goal: Hunt for silent failures — swallowed errors, dangerous fallbacks, unhandled async failures, ignored context cancellation, missing propagation at boundaries.
 ```
 
+```
+Subagent: prophet
+Context:
+- All files changed during implementation: {complete list}
+- Language: {language}
+- Original spec: {spec path, if available}
+Goal: Run all six performance scans. Report findings by severity. Focus on hot paths and realistic scale.
+```
+
 ### Fix review findings
 
-Combine findings from both arbiter and oracle. For each CRITICAL or HIGH finding:
+Combine findings from arbiter, oracle, and prophet. For each CRITICAL or HIGH finding:
 1. Understand the concrete trigger scenario
 2. Fix the production code (not the test)
 3. Verify the fix does not break existing tests
@@ -166,9 +175,40 @@ For MEDIUM and LOW findings: present them to the user and ask whether to fix now
 
 ---
 
+## Post-Implementation: Spec Conformance
+
+After review findings are resolved, verify the implementation fulfills the spec:
+
+### Launch juridical
+
+```
+Subagent: juridical
+Context:
+- Original spec: {spec path}
+- All files changed during implementation: {complete list}
+- Language: {language}
+Goal: Audit every MUST and SHOULD requirement in the spec against the implemented code. Produce a compliance matrix and flag any violations, deviations, or gaps.
+```
+
+If no spec path is available (plan was created from free-form input), skip this step and note: "No spec to audit against — skipping conformance check."
+
+### Fix conformance violations
+
+For each VIOLATION (MUST not fulfilled):
+1. Read the spec requirement and the current code
+2. Implement the missing behavior or fix the deviation
+3. Verify existing tests still pass
+4. Print: `Fixed: {violation summary}`
+
+For each DEVIATION (SHOULD not fulfilled): present to the user and ask whether to implement or document rationale for skipping.
+
+For each GAP (partial): fix the missing cases.
+
+---
+
 ## Post-Implementation: Documentation Pass
 
-After review findings are resolved:
+After conformance is verified:
 
 ### Launch librarian
 
@@ -197,6 +237,8 @@ Run the checklist from `00-overview.md` (always reproduced here as a reminder):
 - [ ] Code follows conventions documented in `00-overview.md`
 - [ ] Tests exist for all new behavior
 - [ ] Review findings resolved (CRITICAL and HIGH)
+- [ ] Performance findings resolved (CRITICAL and HIGH)
+- [ ] Spec conformance verified (all MUST requirements pass)
 - [ ] Documentation updated
 
 If any item is unchecked, fix it before presenting the final summary.
@@ -218,7 +260,15 @@ If any item is unchecked, fix it before presenting the final summary.
 | 1.2 | {name} | {N files} | {N tests} |
 | ... | ... | ... | ... |
 
-### Review Results
+### Review Results (arbiter + oracle)
+| Severity | Found | Fixed | Deferred |
+|---|---|---|---|
+| CRITICAL | {N} | {N} | {N} |
+| HIGH | {N} | {N} | {N} |
+| MEDIUM | {N} | {N} | {N} |
+| LOW | {N} | {N} | {N} |
+
+### Performance Results (prophet)
 | Severity | Found | Fixed | Deferred |
 |---|---|---|---|
 | CRITICAL | {N} | {N} | {N} |

@@ -18,7 +18,9 @@ commands/
   plan.md              # /covenant:plan     — implementation plan with codebase analysis
   implement.md         # /covenant:implement — step-by-step executor
   explore.md           # /covenant:explore  — free-form code exploration
+  research.md          # /covenant:research — deep code research with history and impact
   design.md            # /covenant:design   — architecture design (pre-spec)
+  review.md            # /covenant:review   — PR comment reviewer
   security.md          # /covenant:security — security audit
   hunt.md              # /covenant:hunt     — silent failure hunter
   fix.md               # /covenant:fix      — build error fixer
@@ -28,9 +30,11 @@ agents/
   arbiter.md           # Review — 6-pass correctness review (Sonnet)
   librarian.md         # Docs — updates documentation after implementation (Sonnet)
   monitor.md           # Exploration — finds where things live and how they connect (Haiku)
+  catalog.md           # Research — deep investigation with history and impact (Sonnet)
   warden.md            # Security — 6-scan OWASP audit (Sonnet)
   architect.md         # Design — 2-3 approaches with tradeoffs and blueprint (Sonnet)
   oracle.md            # Silent failures — swallowed errors, dangerous fallbacks (Sonnet)
+  prophet.md           # Performance — N+1 queries, complexity, memory, I/O (Sonnet)
   engineer.md          # Build fixes — minimal surgical changes to make build pass (Sonnet)
 hooks/
   hooks.json           # SessionStart hook wiring
@@ -94,7 +98,9 @@ Every piece of code originates in a specification. The pipeline is linear but ea
 
 **Investigation:**
 - `/covenant:explore` — free-form code investigation (monitor agent)
+- `/covenant:research` — deep code research with history, impact, and hypothesis testing (catalog agent)
 - `/covenant:design` — pre-spec architecture design (architect agent)
+- `/covenant:review` — PR comment reviewer with classification and action plan
 - `/covenant:tour` — generates CodeTour `.tour` files
 
 **Quality:**
@@ -107,12 +113,15 @@ Every piece of code originates in a specification. The pipeline is linear but ea
 | Agent | Model | Role | Invoked by |
 |---|---|---|---|
 | sentinel | Haiku | Creates and runs tests per step | implement (per step) |
-| arbiter | Sonnet | 6-pass correctness review | implement (post-steps, parallel with oracle) |
+| arbiter | Sonnet | 6-pass correctness review | implement (post-steps, parallel with oracle + prophet) |
 | librarian | Sonnet | Updates all documentation | implement (post-review) |
 | monitor | Haiku | Code exploration | explore |
+| catalog | Sonnet | Deep code research with history and impact analysis | research, spec (pre-Phase 2), plan (Phase 2 + 3) |
 | warden | Sonnet | Security audit (6 scans) | security |
 | architect | Sonnet | Architecture design with tradeoffs | design |
-| oracle | Sonnet | Silent failure hunter (6 categories) | implement (post-steps, parallel with arbiter), hunt |
+| oracle | Sonnet | Silent failure hunter (6 categories) | implement (post-steps, parallel with arbiter + prophet), hunt |
+| prophet | Sonnet | Performance reviewer (6 scans) | implement (post-steps, parallel with arbiter + oracle) |
+| juridical | Sonnet | Spec conformance auditor | implement (post-review, before librarian) |
 | engineer | Sonnet | Build error fixer | fix |
 
 ### Language Detection (hooks/detect.js)
@@ -128,9 +137,12 @@ Per step:
   implement step → sentinel (tests) → next step
 
 Post-steps (parallel):
-  arbiter (6-pass review) + oracle (silent failures)
+  arbiter (6-pass review) + oracle (silent failures) + prophet (performance)
 
 Post-review:
+  juridical (spec conformance)
+
+Post-conformance:
   librarian (documentation)
 
 Final:

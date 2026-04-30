@@ -68,11 +68,33 @@ Read `rules/{detected-language}/` files from this plugin to load language-specif
 
 ## Research
 
+### Autonomous Research (throughout all phases)
+
 Search the web autonomously whenever you need to validate a technical claim, compare alternatives, check library APIs, verify behavior, or look up benchmarks. Do not ask for permission — just search.
 
 - Prioritize official documentation, GitHub repositories, and well-known engineering references. Avoid generic tutorials or AI-generated content.
 - When a search result influences a decision, cite the source and the specific data point. Do not say "according to my research" — say what you found and where.
 - If a search contradicts the user's assumption, present the evidence directly.
+
+### Deep Codebase Research (before Phase 2)
+
+Before entering Phase 2 (Solution Exploration), launch the `catalog` agent to investigate the codebase deeply. This ensures design decisions are grounded in real code, not assumptions.
+
+```
+Subagent: catalog
+Question: "How does this codebase handle {relevant concern from Phase 1}? What patterns, interfaces, and constraints exist that the new feature must respect?"
+Mode: full
+Scope: {areas of the codebase relevant to the feature being specified}
+Goal: Deep investigation of existing patterns, contracts, dependencies, and constraints relevant to this feature. Report findings with file:line references. Include historical context if the area has evolved significantly.
+```
+
+Feed catalog's findings into Phase 2 — use them to:
+- Ground design decisions in real codebase patterns
+- Identify existing interfaces the new code must honor
+- Surface constraints that are not documented but exist in the code
+- Avoid proposing solutions that conflict with established patterns
+
+If catalog finds contradictions between documentation and code, surface them to the user in Phase 2.
 
 ---
 
