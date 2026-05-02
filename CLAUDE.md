@@ -167,7 +167,7 @@ None of the agents create git commits — the user commits manually.
 
 ## Supported Tech Stacks
 
-Go, TypeScript/Node.js, Python, Kotlin/Java (Spring Boot), PHP (Laravel/Symfony), Ruby (Rails), Rust (Axum/Actix), Clojure, COBOL.
+Go, TypeScript/Node.js, JavaScript/Express, Python, Kotlin/Java (Spring Boot), PHP (Laravel/Symfony), Ruby (Rails), Rust (Axum/Actix), Clojure, COBOL.
 
 ## Artifacts Location
 
