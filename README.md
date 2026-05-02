@@ -80,7 +80,9 @@ Open a project and run:
 | Command | Description |
 |---|---|
 | `/covenant:explore` | Free-form code exploration — understand how something works |
+| `/covenant:research` | Deep code research — traces history, validates assumptions, maps hidden dependencies |
 | `/covenant:design` | Architecture design — 2-3 approaches with tradeoffs before committing to a spec |
+| `/covenant:review` | PR comment reviewer — fetches, categorizes, and generates an action plan |
 | `/covenant:tour` | Generate a guided code tour (CodeTour `.tour` file) |
 
 ### Quality
@@ -112,6 +114,10 @@ Open a project and run:
 # Explore before speccing
 /covenant:design "real-time notification system"
 /covenant:explore "how does authentication work?"
+/covenant:research "why does the payment module retry 3 times?"
+
+# Review PR comments
+/covenant:review 42
 
 # Quality checks
 /covenant:security
@@ -128,11 +134,14 @@ covenant uses specialized agents named after the Halo universe:
 |---|---|---|
 | **sentinel** | Creates and runs tests per implementation step | Haiku |
 | **arbiter** | 6-pass correctness review (consumer, symmetry, robustness, concurrency, wiring, security) | Sonnet |
+| **oracle** | Hunts silent failures — swallowed errors, dangerous fallbacks, unhandled async | Sonnet |
+| **prophet** | Performance reviewer — N+1 queries, O(n²) loops, blocking I/O, missing caching | Sonnet |
+| **juridical** | Spec conformance auditor — verifies every requirement was implemented correctly | Sonnet |
 | **librarian** | Updates documentation after implementation | Sonnet |
 | **monitor** | Code exploration — finds where things live and how they connect | Haiku |
+| **catalog** | Deep code researcher — traces history, validates assumptions, maps hidden dependencies | Sonnet |
 | **warden** | Security auditor — 6 scan categories, skeptical validation before reporting | Sonnet |
 | **architect** | Proposes 2-3 architectural approaches with concrete tradeoffs and a blueprint | Sonnet |
-| **oracle** | Hunts silent failures — swallowed errors, dangerous fallbacks, unhandled async | Sonnet |
 | **engineer** | Fixes build/type errors with minimal changes — no refactoring, just green | Sonnet |
 
 ---
@@ -188,8 +197,9 @@ Common rules (apply to all languages) are in `rules/common/`.
 
 /covenant:implement .covenant/plans/{name}/
   ├─ Per step: implement → sentinel (tests) → next step
-  ├─ Post-steps: arbiter + oracle (parallel review)
-  └─ Post-review: librarian (documentation)
+  ├─ Post-steps: arbiter + oracle + prophet (parallel review)
+  ├─ Post-review: juridical (spec conformance)
+  └─ Post-conformance: librarian (documentation)
 ```
 
 ### Skip straight to spec
@@ -202,6 +212,8 @@ Common rules (apply to all languages) are in `rules/common/`.
 
 ```bash
 /covenant:explore "what calls the payment processor?"
+/covenant:research "how has the auth middleware evolved and what depends on it?"
+/covenant:review 87
 /covenant:tour onboarding
 /covenant:design "caching strategy for the product catalog"
 ```
@@ -216,10 +228,13 @@ Common rules (apply to all languages) are in `rules/common/`.
 agents/
   arbiter.md           ← correctness reviewer
   architect.md         ← architecture designer
+  catalog.md           ← deep code researcher
   engineer.md          ← build error fixer
+  juridical.md         ← spec conformance auditor
   librarian.md         ← documentation writer
   monitor.md           ← code explorer
   oracle.md            ← silent failure hunter
+  prophet.md           ← performance reviewer
   sentinel.md          ← test writer
   warden.md            ← security auditor
 commands/
@@ -230,6 +245,8 @@ commands/
   implement.md         ← /covenant:implement
   plan.md              ← /covenant:plan
   prd.md               ← /covenant:prd
+  research.md          ← /covenant:research
+  review.md            ← /covenant:review
   security.md          ← /covenant:security
   spec.md              ← /covenant:spec
   tour.md              ← /covenant:tour
