@@ -136,12 +136,11 @@ Commands that load `rules/` files at startup:
 
 | Command | What it loads |
 |---|---|
-| `spec` | `rules/{lang}/*` (all 4 files) |
 | `plan` | `rules/common/*` (3 files) + `rules/{lang}/*` (4 files) |
 | `hunt` | `rules/common/security.md` + `rules/{lang}/security.md` |
 | `security` | `rules/common/security.md` + `rules/{lang}/security.md` |
 
-Other commands (`implement`, `explore`, `research`, `design`, `review`, `fix`, `tour`) do not load rules directly.
+Other commands (`spec`, `implement`, `explore`, `research`, `design`, `review`, `fix`, `tour`) do not load rules directly.
 
 ### implement Flow
 

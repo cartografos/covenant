@@ -62,8 +62,6 @@ Look for these markers in the current directory:
 - `Cargo.toml` → Rust
 - `pom.xml` → Java
 
-Read `rules/{detected-language}/` files from this plugin to load language-specific patterns, conventions, and constraints. Reference them throughout the specification — especially in Section 3 (API Contract) and Section 8 (Implementation Notes).
-
 ---
 
 ## Research
@@ -516,8 +514,7 @@ If user chooses **Document only**:
 3. Write the Phase 3 output as a well-formatted markdown document to the specified location
 
 If user chooses **Generate implementation plan**:
-1. Read all rules from `rules/{detected-language}/` if not already loaded
-2. Analyze the spec to assess complexity (Simple / Medium / Large / XL)
+1. Analyze the spec to assess complexity (Simple / Medium / Large / XL)
 3. Generate plan files in `.covenant/plans/{name}/` (see `/covenant:plan` for format)
 4. Present the Plan Created summary
 5. Ask: **"The plan is ready. Would you like to execute it now using `/covenant:implement`? (y/n)"**
