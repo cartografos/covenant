@@ -122,27 +122,29 @@ If catalog surfaces contradictions, hidden risks, or undocumented assumptions, c
 
 ---
 
-## Phase 3 — RESEARCH: External Knowledge
+## Phase 3 — RESEARCH: Dependency Validation
 
 If the feature involves external libraries, APIs, or unfamiliar technology, launch catalog again with a targeted scope:
 
 ```
 Subagent: catalog
-Question: "What are the best practices, known issues, and version-specific gotchas for {library/API/technology}?"
+Question: "What does this codebase reveal about how {library/API/technology} is used, configured, and constrained?"
 Mode: assumption
 Scope: {specific dependency or external system}
-Goal: Validate assumptions about external dependencies. Check official docs, known breaking changes, and CVEs at the pinned version. Report findings with sources.
+Goal: Validate assumptions about external dependencies using codebase evidence only. Check lock files for pinned versions, read CHANGELOG and migration notes in the repo, examine existing usage patterns and configuration. Report findings with file:line references.
 ```
 
 Format each finding as:
 ```
 KEY_INSIGHT: {what you learned}
 APPLIES_TO: {which part of the plan this affects}
-GOTCHA: {warnings or version-specific issues}
-SOURCE: {URL or documentation reference}
+GOTCHA: {warnings or version-specific issues found in local files}
+SOURCE: {file:line reference}
 ```
 
 If the feature uses only well-understood internal patterns, skip this phase and note: "No external research needed — feature uses established internal patterns."
+
+> **Note**: Catalog performs codebase-only research. If the feature depends on external APIs, undocumented behavior, or known CVEs that cannot be verified from local files, flag these as assumptions in the plan. The user should validate them manually before implementation.
 
 ---
 

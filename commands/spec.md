@@ -39,6 +39,7 @@ The SessionStart hook injects the detected language and absolute paths to rule f
 | Input Pattern | Action |
 |---|---|
 | Path ending in `.prd.md` | Read PRD, extract next pending phase as the feature to specify |
+| Path ending in `.design.md` | Read design blueprint, use the selected approach and blueprint as the starting point for Phase 2 |
 | Path to any `.md` file | Read file for context, treat as informal requirements |
 | Free-form text | Use directly as feature description |
 | Blank | Ask user what to specify |

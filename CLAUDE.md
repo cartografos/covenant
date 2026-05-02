@@ -26,10 +26,10 @@ commands/
   fix.md               # /covenant:fix      — build error fixer
   tour.md              # /covenant:tour     — CodeTour file generator
 agents/
-  sentinel.md          # Testing — creates and runs tests per step (Haiku)
+  sentinel.md          # Testing — creates and runs tests per step (Sonnet)
   arbiter.md           # Review — 6-pass correctness review (Sonnet)
   librarian.md         # Docs — updates documentation after implementation (Sonnet)
-  monitor.md           # Exploration — finds where things live and how they connect (Haiku)
+  monitor.md           # Exploration — finds where things live and how they connect (Sonnet)
   catalog.md           # Research — deep investigation with history and impact (Sonnet)
   warden.md            # Security — 6-scan OWASP audit (Sonnet)
   architect.md         # Design — 2-3 approaches with tradeoffs and blueprint (Sonnet)
@@ -42,6 +42,7 @@ hooks/
 rules/
   common/              # Language-agnostic: coding-style, testing, security
   golang/              # Go: coding-style, patterns, testing, security
+  javascript/          # JavaScript/Express: coding-style, patterns, testing, security
   typescript/          # TypeScript/Node.js: coding-style, patterns, testing, security
   python/              # Python: coding-style, patterns, testing, security
   kotlin/              # Kotlin/Spring Boot: coding-style, patterns, testing, security
@@ -99,7 +100,7 @@ Every piece of code originates in a specification. The pipeline is linear but ea
 **Investigation:**
 - `/covenant:explore` — free-form code investigation (monitor agent)
 - `/covenant:research` — deep code research with history, impact, and hypothesis testing (catalog agent)
-- `/covenant:design` — pre-spec architecture design (architect agent)
+- `/covenant:design` → `.covenant/designs/{name}.design.md` — pre-spec architecture design (architect agent)
 - `/covenant:review` — PR comment reviewer with classification and action plan
 - `/covenant:tour` — generates CodeTour `.tour` files
 
@@ -137,10 +138,11 @@ Commands that load `rules/` files at startup:
 | Command | What it loads |
 |---|---|
 | `plan` | `rules/common/*` (3 files) + `rules/{lang}/*` (4 files) |
+| `implement` | `rules/common/*` (3 files) + `rules/{lang}/*` (4 files) — via hook or fallback |
 | `hunt` | `rules/common/security.md` + `rules/{lang}/security.md` |
 | `security` | `rules/common/security.md` + `rules/{lang}/security.md` |
 
-Other commands (`spec`, `implement`, `explore`, `research`, `design`, `review`, `fix`, `tour`) do not load rules directly.
+Other commands (`spec`, `explore`, `research`, `design`, `review`, `fix`, `tour`) do not load rules directly.
 
 ### implement Flow
 
@@ -173,6 +175,7 @@ All generated artifacts live under `.covenant/` in the project being worked on:
 
 ```
 .covenant/
+  designs/  ← Design blueprints (.design.md)
   prds/     ← PRD files (.prd.md)
   specs/    ← Spec files (.spec.md)
   plans/    ← Plan folders (00-overview.md + numbered phase files)

@@ -25,6 +25,7 @@ All artifacts are saved under `.covenant/` in your project:
 
 ```
 .covenant/
+  designs/  ← architecture blueprints
   prds/     ← product requirements documents
   specs/    ← technical specifications
   plans/    ← implementation plans (numbered phase files)
@@ -256,6 +257,7 @@ hooks/
 rules/
   common/              ← language-agnostic rules
   golang/
+  javascript/
   typescript/
   python/
   kotlin/
