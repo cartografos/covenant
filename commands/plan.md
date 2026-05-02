@@ -15,7 +15,7 @@ Generate a detailed, self-contained implementation plan from a specification. Ev
 
 ## Startup: Load Language Rules
 
-The SessionStart hook injects the detected language and absolute paths to rule files into the session context. Look for the `[Covenant]` block — it lists `Rule files:` with absolute paths. Read every listed rule file before proceeding. If no `[Covenant]` block is present or no rule files are listed, skip and continue.
+Check for language marker files and read `rules/common/coding-style.md` + `rules/common/testing.md` + `rules/common/security.md` + `rules/{lang}/coding-style.md` + `rules/{lang}/patterns.md` + `rules/{lang}/testing.md` + `rules/{lang}/security.md` before proceeding. These rules inform naming conventions, error handling, test structure, and security constraints throughout the plan — especially in the Patterns to Mirror section and step-level Implementation Notes.
 
 ---
 
