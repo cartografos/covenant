@@ -127,7 +127,11 @@ Move to the next step.
 If the plan marks two phases as parallel (e.g., "Phase 3 parallel with Phase 4"):
 1. Complete all steps in both phases independently
 2. Run sentinel for each step as usual
-3. After both phases complete, verify integration between them before proceeding to dependent phases
+3. After both phases complete, verify integration before proceeding to dependent phases:
+   - All cross-phase imports resolve and compile (`build` / `tsc` / `go build` exits 0)
+   - No duplicate type definitions, conflicting exports, or symbol collisions between phases
+   - Tests from both phases pass when run together (not just in isolation)
+   - Shared state (database tables, config keys, env vars) introduced by both phases is consistent
 
 ---
 
