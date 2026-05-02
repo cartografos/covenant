@@ -112,10 +112,10 @@ Every piece of code originates in a specification. The pipeline is linear but ea
 
 | Agent | Model | Role | Invoked by |
 |---|---|---|---|
-| sentinel | Haiku | Creates and runs tests per step | implement (per step) |
+| sentinel | Sonnet | Creates and runs tests per step | implement (per step) |
 | arbiter | Sonnet | 6-pass correctness review | implement (post-steps, parallel with oracle + prophet) |
 | librarian | Sonnet | Updates all documentation | implement (post-review) |
-| monitor | Haiku | Code exploration | explore |
+| monitor | Sonnet | Code exploration | explore |
 | catalog | Sonnet | Deep code research with history and impact analysis | research, spec (pre-Phase 2), plan (Phase 2 + 3) |
 | warden | Sonnet | Security audit (6 scans) | security |
 | architect | Sonnet | Architecture design with tradeoffs | design |

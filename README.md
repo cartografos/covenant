@@ -132,13 +132,13 @@ covenant uses specialized agents named after the Halo universe:
 
 | Agent | Role | Model |
 |---|---|---|
-| **sentinel** | Creates and runs tests per implementation step | Haiku |
+| **sentinel** | Creates and runs tests per implementation step | Sonnet |
 | **arbiter** | 6-pass correctness review (consumer, symmetry, robustness, concurrency, wiring, security) | Sonnet |
 | **oracle** | Hunts silent failures — swallowed errors, dangerous fallbacks, unhandled async | Sonnet |
 | **prophet** | Performance reviewer — N+1 queries, O(n²) loops, blocking I/O, missing caching | Sonnet |
 | **juridical** | Spec conformance auditor — verifies every requirement was implemented correctly | Sonnet |
 | **librarian** | Updates documentation after implementation | Sonnet |
-| **monitor** | Code exploration — finds where things live and how they connect | Haiku |
+| **monitor** | Code exploration — finds where things live and how they connect | Sonnet |
 | **catalog** | Deep code researcher — traces history, validates assumptions, maps hidden dependencies | Sonnet |
 | **warden** | Security auditor — 6 scan categories, skeptical validation before reporting | Sonnet |
 | **architect** | Proposes 2-3 architectural approaches with concrete tradeoffs and a blueprint | Sonnet |
