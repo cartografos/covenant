@@ -7,8 +7,6 @@ argument-hint: "[path/to/scan] (blank = full repo)"
 
 **Input**: $ARGUMENTS (optional path to scope the scan)
 
-Check for language marker files and read `rules/common/security.md` + `rules/{lang}/security.md` before proceeding.
-
 Launch a focused security review of the codebase or a specific area. Produces a structured report of findings by severity before they reach production.
 
 Run this:

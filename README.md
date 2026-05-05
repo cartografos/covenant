@@ -38,7 +38,6 @@ All artifacts are saved under `.covenant/` in your project:
 ### Requirements
 
 - [Claude Code](https://claude.ai/code) CLI installed
-- Node.js ≥ 18 in your PATH (for the language detection hook)
 
 ### Install
 
@@ -149,29 +148,7 @@ covenant uses specialized agents named after the Halo universe:
 
 ## Language Support
 
-covenant auto-detects the project language via a SessionStart hook and loads the relevant rules on-demand when a command is invoked. Supports language **and** framework detection:
-
-| Language | Detected Frameworks |
-|---|---|
-| Go | gin, echo, fiber |
-| Rust | axum, actix |
-| Python | fastapi, django, flask |
-| TypeScript | nextjs, nestjs, react, vue, angular, svelte, remix, astro, nuxt, electron |
-| JavaScript | express |
-| Kotlin | Spring Boot |
-| Java | Spring Boot |
-| PHP | laravel, symfony |
-| Ruby | rails, sinatra |
-| Clojure | compojure, pedestal, luminus |
-| COBOL | — |
-
-Rules are organized in `rules/{language}/` with four files each:
-- `coding-style.md` — naming, formatting, idioms
-- `patterns.md` — architecture patterns with real code examples
-- `testing.md` — test framework, structure, coverage requirements
-- `security.md` — language-specific security rules with code examples
-
-Common rules (apply to all languages) are in `rules/common/`.
+Any. covenant agents read the actual codebase and adapt to whatever language, framework, and patterns they find — there are no language-specific rule files or detection hooks.
 
 ---
 
@@ -251,22 +228,6 @@ commands/
   security.md          ← /covenant:security
   spec.md              ← /covenant:spec
   tour.md              ← /covenant:tour
-hooks/
-  hooks.json           ← SessionStart hook wiring
-  detect.js            ← language + framework detection (Node.js)
-rules/
-  common/              ← language-agnostic rules
-  golang/
-  javascript/
-  typescript/
-  python/
-  kotlin/
-  java/
-  php/
-  ruby/
-  rust/
-  clojure/
-  cobol/
 ```
 
 ---
@@ -279,10 +240,3 @@ Plugin content is Markdown and JSON — no build step required.
 |---|---|
 | Commands | Markdown with `description:` YAML frontmatter |
 | Agents | Markdown with `name`, `description`, `tools`, `model` frontmatter |
-| Rules | Plain Markdown |
-| Hooks | `hooks.json` + Node.js scripts |
-
-To add a new language:
-1. Create `rules/{language}/coding-style.md`, `patterns.md`, `testing.md`, `security.md`
-2. Add a language entry to `hooks/detect.js` (`LANGUAGES` array)
-3. Add framework entries if applicable (`FRAMEWORKS` array)

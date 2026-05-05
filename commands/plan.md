@@ -13,13 +13,11 @@ Generate a detailed, self-contained implementation plan from a specification. Ev
 
 ---
 
-## Startup: Load Language Rules
-
-Check for language marker files and read `rules/common/coding-style.md` + `rules/common/testing.md` + `rules/common/security.md` + `rules/{lang}/coding-style.md` + `rules/{lang}/patterns.md` + `rules/{lang}/testing.md` + `rules/{lang}/security.md` before proceeding. These rules inform naming conventions, error handling, test structure, and security constraints throughout the plan — especially in the Patterns to Mirror section and step-level Implementation Notes.
-
----
-
 ## Phase 0 — DETECT: Understand Input
+
+If `.covenant/style.md` exists in the project, read it before any planning. It captures the project's de-facto conventions (naming, file layout, error handling, testing, programming style) and should be cited in the plan's "Patterns to Mirror" section instead of inventing patterns from scratch. If it does not exist, proceed without it — `catalog` will still surface patterns during Phase 2.
+
+
 
 | Input Pattern | Action |
 |---|---|
@@ -77,46 +75,21 @@ Do NOT guess. A plan built on assumptions fails during implementation.
 
 ## Phase 2 — EXPLORE: Deep Codebase Analysis
 
-Launch the `catalog` agent to perform deep codebase investigation. Catalog handles the eight search categories and five traces below — do not duplicate this work manually.
+Launch the `catalog` agent to investigate the patterns and constraints relevant to this feature.
 
 ```
 Subagent: catalog
-Question: "Investigate how this codebase implements features similar to {feature being planned}. Map patterns, conventions, contracts, and dependencies in the relevant area."
+Question: "How does this codebase implement features similar to {feature being planned}? Map the patterns, conventions, contracts, and dependencies the new code must respect."
 Mode: full
 Scope: {packages, modules, or directories relevant to the feature}
-Goal: Produce a complete discovery table covering: similar implementations, naming conventions, error handling, logging, type definitions, test patterns, configuration, and dependencies. Include five traces: entry points, data flow, state changes, contracts, and architectural patterns. Every finding must include file:line references and real code snippets.
+Goal: Surface the patterns the new feature must mirror — naming, error handling, test patterns, type organization, integration points. Investigate only the dimensions relevant to this feature; skip categories that don't apply. Every finding must have file:line references and real snippets.
 ```
 
-### What Catalog Investigates
-
-**Eight Search Categories:**
-
-1. **Similar Implementations** — Features that resemble what we are building
-2. **Naming Conventions** — File, type, function, variable naming in this area
-3. **Error Handling** — Error creation, wrapping, propagation, and return patterns
-4. **Logging Patterns** — What gets logged, at what level, in what format
-5. **Type Definitions** — Relevant types, interfaces, and schemas
-6. **Test Patterns** — How similar features are tested
-7. **Configuration** — Config files, env vars, feature flags
-8. **Dependencies** — Packages, internal libraries, external APIs
-
-**Five Traces:**
-
-1. **Entry Points** — How requests reach the area being modified
-2. **Data Flow** — How data moves through relevant code paths
-3. **State Changes** — What state is mutated, where, and under what conditions
-4. **Contracts** — Interfaces, APIs, or protocols the new code must honor
-5. **Patterns** — Architectural patterns in use
-
-### Unified Discovery Table
-
-After catalog completes, compile findings into one reference table:
+After catalog completes, compile a single reference table the plan can cite from:
 
 | Category | File:Lines | Pattern | Key Snippet |
 |---|---|---|---|
-| Naming | `pkg/users/service.go:1-10` | PascalCase types, camelCase methods | `type UserService struct` |
-| Error Handling | `pkg/errors/errors.go:15-30` | Sentinel errors + wrapping | `var ErrNotFound = errors.New(...)` |
-| ... | ... | ... | ... |
+| {whatever catalog found} | `{file:lines}` | {pattern} | `{snippet}` |
 
 If catalog surfaces contradictions, hidden risks, or undocumented assumptions, carry them forward into Phase 4 (DESIGN) as constraints.
 
@@ -212,13 +185,13 @@ As a {user}, I want {capability}, so that {benefit}.
 
 ## Mandatory Reading
 
-Files that MUST be read before implementing any step:
+Files to read before implementing any step:
 
-| Priority | File | Lines | Why |
-|---|---|---|---|
-| P0 | `{path}` | {lines} | {core pattern to follow} |
-| P1 | `{path}` | {lines} | {related types or contracts} |
-| P2 | `{path}` | {lines} | {similar implementation for reference} |
+| File | Lines | Why |
+|---|---|---|
+| `{path}` | {lines} | {what pattern or contract this provides} |
+
+Keep the list short — only files an implementer truly cannot proceed without.
 
 ## Patterns to Mirror
 
@@ -249,14 +222,15 @@ Type checker: {command}
 
 ## Delivery Checklist
 
-After all steps are complete, verify:
-- [ ] All steps completed and Done-when criteria verified
-- [ ] No compiler / interpreter errors
-- [ ] All exported symbols have doc comments
-- [ ] No internal types leaked through public API
-- [ ] Code follows conventions documented in this overview
+After all steps complete, verify:
+- [ ] All steps completed and Done-when criteria met
+- [ ] Build / type-check / lint pass with no new errors
 - [ ] Tests exist for all new behavior
-- [ ] No hardcoded values (use config or constants)
+- [ ] Code follows the conventions documented above
+- [ ] No hardcoded values that belong in config or constants
+- [ ] No internal types leaked through public API
+
+`/covenant:implement` adds review-finding and conformance items at runtime — do not duplicate them here.
 ```
 
 ### Phase file template (`01-{name}.md`, `02-{name}.md`, ...)
@@ -336,25 +310,12 @@ After saving all files, always display:
 
 ## Verification: Before Finalizing
 
-Check the plan against these requirements:
+The plan must pass the **No Prior Knowledge Test**: a developer unfamiliar with this codebase should be able to implement the feature using only this plan, without searching the codebase or asking questions.
 
-### Context Completeness
-- [ ] All relevant files discovered and documented with file:line references
-- [ ] Naming conventions captured with real code snippets
-- [ ] Error handling patterns documented with real examples
-- [ ] Test patterns identified from actual test files
-- [ ] All external dependencies listed
+Concretely, verify:
+- Every step has Goal, File(s), Types/Signatures, Implementation Notes, and Done-when.
+- Every code snippet is a real example from this codebase — none invented. `SOURCE:` references point to real `file:lines`.
+- No step requires additional codebase searching during implementation.
+- GOTCHAs are documented wherever a subtle mistake is possible.
 
-### Implementation Readiness
-- [ ] Every step has Goal, File(s), Types/Signatures, Implementation Notes, and Done-when
-- [ ] No step requires additional codebase searching
-- [ ] Import paths are specified or derivable from patterns
-- [ ] GOTCHAs documented wherever a subtle mistake is possible
-
-### Pattern Faithfulness
-- [ ] All code snippets are actual codebase examples — none invented
-- [ ] SOURCE references point to real, verified file paths and line numbers
-- [ ] Patterns cover naming, errors, logging, data access, and tests
-
-### No Prior Knowledge Test
-A developer unfamiliar with this codebase should be able to implement the feature using ONLY this plan, without searching the codebase or asking questions. If not — add the missing context.
+If any check fails, add the missing context before finalizing.

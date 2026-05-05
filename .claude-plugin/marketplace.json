@@ -7,8 +7,8 @@
   "plugins": [
     {
       "name": "covenant",
-      "description": "Spec-Driven Development pipeline — from PRD to specification, implementation plan, and delivery with rigorous quality gates and language-aware rules",
-      "version": "1.4.0",
+      "description": "Spec-Driven Development pipeline — from PRD to specification, implementation plan, and delivery with rigorous quality gates",
+      "version": "2.0.0",
       "author": {
         "name": "Cartografos"
       },

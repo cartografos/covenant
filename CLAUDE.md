@@ -4,54 +4,41 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## What This Repo Is
 
-`sdd-covenant` is the source for the **covenant** Claude Code plugin — a Spec-Driven Development pipeline that takes a feature from PRD to specification, implementation plan, and delivery with rigorous quality gates and language-aware rules.
+`sdd-covenant` is the source for the **covenant** Claude Code plugin — a Spec-Driven Development pipeline that takes a feature from PRD to specification, implementation plan, and delivery with rigorous quality gates.
 
-There is no build step — all plugin content is Markdown and JSON. The only exception is `hooks/detect.js`, a Node.js script for language detection.
+There is no build step — all plugin content is Markdown and JSON.
 
 ```
 .claude-plugin/
   plugin.json          # Manifest (name: covenant, version: 1.0.0)
   marketplace.json     # Registry for /plugin marketplace add cartografos/covenant
 commands/
-  prd.md               # /covenant:prd      — interactive PRD generator
-  spec.md              # /covenant:spec     — rigorous specification (RFC 2119, 4 phases + gates)
+  prd.md               # /covenant:prd      — interactive PRD generator (5 phases)
+  spec.md              # /covenant:spec     — RFC 2119 specification with Light/Standard paths
   plan.md              # /covenant:plan     — implementation plan with codebase analysis
   implement.md         # /covenant:implement — step-by-step executor
   explore.md           # /covenant:explore  — free-form code exploration
-  research.md          # /covenant:research — deep code research with history and impact
+  research.md          # /covenant:research — deep code research (current code only, not git history)
   design.md            # /covenant:design   — architecture design (pre-spec)
   review.md            # /covenant:review   — PR comment reviewer
   security.md          # /covenant:security — security audit
   hunt.md              # /covenant:hunt     — silent failure hunter
   fix.md               # /covenant:fix      — build error fixer
   tour.md              # /covenant:tour     — CodeTour file generator
+  codify.md            # /covenant:codify   — generates .covenant/style.md from real patterns in the code
 agents/
   sentinel.md          # Testing — creates and runs tests per step (Sonnet)
-  arbiter.md           # Review — 6-pass correctness review (Sonnet)
-  librarian.md         # Docs — updates documentation after implementation (Sonnet)
+  arbiter.md           # Review — functional correctness, runs only relevant passes (Sonnet)
+  librarian.md         # Docs — updates only docs the change actually affects (Sonnet)
   monitor.md           # Exploration — finds where things live and how they connect (Sonnet)
-  catalog.md           # Research — deep investigation with history and impact (Sonnet)
-  warden.md            # Security — 6-scan OWASP audit (Sonnet)
-  architect.md         # Design — 2-3 approaches with tradeoffs and blueprint (Sonnet)
+  catalog.md           # Research — deep investigation of current code (Sonnet)
+  warden.md            # Security — OWASP audit, runs only relevant scans (Sonnet)
+  architect.md         # Design — 1-3 approaches with tradeoffs and blueprint (Sonnet)
   oracle.md            # Silent failures — swallowed errors, dangerous fallbacks (Sonnet)
-  prophet.md           # Performance — N+1 queries, complexity, memory, I/O (Sonnet)
+  prophet.md           # Performance — runs only relevant scans (Sonnet)
+  juridical.md         # Spec conformance — verifies every MUST/SHOULD against code (Sonnet)
   engineer.md          # Build fixes — minimal surgical changes to make build pass (Sonnet)
-hooks/
-  hooks.json           # SessionStart hook wiring
-  detect.js            # Language + framework detection (Node.js, ~130 lines)
-rules/
-  common/              # Language-agnostic: coding-style, testing, security
-  golang/              # Go: coding-style, patterns, testing, security
-  javascript/          # JavaScript/Express: coding-style, patterns, testing, security
-  typescript/          # TypeScript/Node.js: coding-style, patterns, testing, security
-  python/              # Python: coding-style, patterns, testing, security
-  kotlin/              # Kotlin/Spring Boot: coding-style, patterns, testing, security
-  java/                # Java/Spring Boot: coding-style, patterns, testing, security
-  php/                 # PHP/Laravel: coding-style, patterns, testing, security
-  ruby/                # Ruby/Rails: coding-style, patterns, testing, security
-  rust/                # Rust/Axum/Actix: coding-style, patterns, testing, security
-  clojure/             # Clojure/Compojure: coding-style, patterns, testing, security
-  cobol/               # COBOL: coding-style, patterns, testing, security
+  didact.md            # Style codifier — surveys project and writes .covenant/style.md (Sonnet)
 ```
 
 > `source/` is a reference directory (gitignored) used during initial design. It will be removed.
@@ -75,9 +62,6 @@ claude --plugin-dir .
 | `.claude-plugin/marketplace.json` | Marketplace registry entry |
 | `agents/*.md` | Agent definitions — YAML frontmatter: `name`, `description`, `tools`, `model` |
 | `commands/*.md` | Slash commands — require `description:` frontmatter |
-| `hooks/hooks.json` | Hook event wiring (SessionStart) |
-| `hooks/detect.js` | Node.js language + framework detection |
-| `rules/{lang}/*.md` | Language-specific rules loaded on-demand by commands |
 
 ## covenant Architecture
 
@@ -101,48 +85,35 @@ Every piece of code originates in a specification. The pipeline is linear but ea
 - `/covenant:explore` — free-form code investigation (monitor agent)
 - `/covenant:research` — deep code research with history, impact, and hypothesis testing (catalog agent)
 - `/covenant:design` → `.covenant/designs/{name}.design.md` — pre-spec architecture design (architect agent)
+- `/covenant:codify` → `.covenant/style.md` — surveys project and writes descriptive coding-style doc (didact agent)
 - `/covenant:review` — PR comment reviewer with classification and action plan
 - `/covenant:tour` — generates CodeTour `.tour` files
 
 **Quality:**
-- `/covenant:security` — 6-scan security audit (warden agent)
+- `/covenant:security` — security audit (warden agent)
 - `/covenant:hunt` — silent failure detection (oracle agent)
 - `/covenant:fix` — build error resolution (engineer agent)
 
-### Agents (Halo universe names)
+### Agents
 
 | Agent | Model | Role | Invoked by |
 |---|---|---|---|
 | sentinel | Sonnet | Creates and runs tests per step | implement (per step) |
-| arbiter | Sonnet | 6-pass correctness review | implement (post-steps, parallel with oracle + prophet) |
-| librarian | Sonnet | Updates all documentation | implement (post-review) |
+| arbiter | Sonnet | Functional correctness review | implement (post-steps, parallel with oracle + prophet) |
+| librarian | Sonnet | Updates only docs the change affects | implement (post-review) |
 | monitor | Sonnet | Code exploration | explore |
-| catalog | Sonnet | Deep code research with history and impact analysis | research, spec (pre-Phase 2), plan (Phase 2 + 3) |
-| warden | Sonnet | Security audit (6 scans) | security |
+| catalog | Sonnet | Deep research of the current code (no git history) | research, spec (pre-Phase 2), plan (Phase 2 + 3) |
+| warden | Sonnet | Security audit | security |
 | architect | Sonnet | Architecture design with tradeoffs | design |
-| oracle | Sonnet | Silent failure hunter (6 categories) | implement (post-steps, parallel with arbiter + prophet), hunt |
-| prophet | Sonnet | Performance reviewer (6 scans) | implement (post-steps, parallel with arbiter + oracle) |
+| oracle | Sonnet | Silent failure hunter | implement (post-steps), hunt |
+| prophet | Sonnet | Performance reviewer | implement (post-steps) |
 | juridical | Sonnet | Spec conformance auditor | implement (post-review, before librarian) |
 | engineer | Sonnet | Build error fixer | fix |
+| didact | Sonnet | Surveys project and writes coding-style document | codify |
 
-### Language Detection (hooks/detect.js)
+### Language Handling
 
-Runs at SessionStart. Detects language from marker files and framework from dependency files. Outputs one line: `[Covenant] golang/gin`. Rules load on-demand when a command is invoked — not at session start.
-
-Supported: Go (gin/echo/fiber), Rust (axum/actix), Python (fastapi/django/flask), TypeScript (nextjs/nestjs/react/vue/angular/svelte/remix/astro/nuxt/electron), JavaScript (express), Kotlin, Java, PHP (laravel/symfony), Ruby (rails/sinatra), Clojure (compojure/pedestal/luminus), COBOL.
-
-### Rule Loading
-
-Commands that load `rules/` files at startup:
-
-| Command | What it loads |
-|---|---|
-| `plan` | `rules/common/*` (3 files) + `rules/{lang}/*` (4 files) |
-| `implement` | `rules/common/*` (3 files) + `rules/{lang}/*` (4 files) — via hook or fallback |
-| `hunt` | `rules/common/security.md` + `rules/{lang}/security.md` |
-| `security` | `rules/common/security.md` + `rules/{lang}/security.md` |
-
-Other commands (`spec`, `explore`, `research`, `design`, `review`, `fix`, `tour`) do not load rules directly.
+There is no language detection or language-specific rules. Agents read the actual codebase and adapt to whatever language and patterns they find.
 
 ### implement Flow
 
@@ -167,7 +138,7 @@ None of the agents create git commits — the user commits manually.
 
 ## Supported Tech Stacks
 
-Go, TypeScript/Node.js, JavaScript/Express, Python, Kotlin/Java (Spring Boot), PHP (Laravel/Symfony), Ruby (Rails), Rust (Axum/Actix), Clojure, COBOL.
+Any. Agents read the actual codebase rather than language-specific templates.
 
 ## Artifacts Location
 
@@ -179,4 +150,5 @@ All generated artifacts live under `.covenant/` in the project being worked on:
   prds/     ← PRD files (.prd.md)
   specs/    ← Spec files (.spec.md)
   plans/    ← Plan folders (00-overview.md + numbered phase files)
+  style.md  ← Project coding-style document (generated by /covenant:codify)
 ```

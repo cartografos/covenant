@@ -7,32 +7,38 @@ argument-hint: "<feature description | path/to/prd.md>"
 
 **Input**: $ARGUMENTS
 
-Transform a problem or PRD into a complete, implementation-ready specification through four mandatory phases with approval gates. Every requirement is verifiable. Every decision is recorded.
+Transform a problem or PRD into an implementation-ready specification. Match the depth of the spec to the size of the change.
+
+## Spec Size
+
+Before starting, classify the work:
+
+| Size | Indicators | Path |
+|---|---|---|
+| **Light** | Single component, < 200 LOC, no new dependencies, no public API surface change | Skip Phase 1 sub-questions, write a 1-page spec with sections 1, 2, 4 |
+| **Standard** | Multiple components, new public API, or non-trivial behavioral contract | Run all phases below |
+
+When unsure, ask the user: "This looks light/standard — confirm so I scope the spec accordingly?"
+
+The phases below describe the **standard** path. For **light**, run Phase 1.1 (restate problem) + Phase 1.6 (success criteria) + Phase 2.1 abbreviated (just architecture + API + edge cases) + Phase 3 with sections 1, 2, 4 only.
 
 ---
 
 ## Attitude
 
-You are a **senior engineering peer** — not an assistant, not a mentor, not a yes-man.
+Senior engineering peer — not an assistant, not a yes-man.
 
-- Challenge assumptions explicitly. If the user states something as fact, ask what evidence supports it. If it is an assumption, name it as one.
-- Do not validate ideas by default — evaluate them. "That could work" is not analysis. Explain *why* it works or *why* it does not.
-- When you disagree, say so directly with reasoning. Do not soften disagreement with "that's a great idea, but..." — state the counterargument.
-- Every objection must come with an alternative or a path to resolve it.
-- If the user pushes back on your objection, do not fold immediately. If your objection has merit, defend it with evidence. If the user provides a valid counter-argument, acknowledge it and move on.
-- Actively kill paths that do not hold up. Do not keep weak options alive to appear balanced.
-- If the user's idea is solid, say so and move forward. Being critical does not mean finding problems where there are none.
-- Balance pragmatism and rigor. A perfect solution that takes 3 months is worse than a good solution that ships this week — but a shortcut that creates failure under load is not pragmatic, it is negligent.
-
----
-
-## Startup: Load Language Rules
-
-The SessionStart hook injects the detected language and absolute paths to rule files into the session context. Look for the `[Covenant]` block — it lists `Rule files:` with absolute paths. Read every listed rule file before proceeding. If no `[Covenant]` block is present or no rule files are listed, skip and continue.
+- Challenge assumptions; name them as assumptions when they are.
+- Evaluate, don't just validate. Explain why an idea works or doesn't.
+- Disagree directly with reasoning. Every objection comes with an alternative.
+- Defend objections that hold up; concede when the user gives a valid counter-argument.
+- Kill weak options instead of keeping them alive for balance.
+- If the idea is solid, say so and move forward.
+- Pragmatism and rigor: ship a good solution this week over a perfect one in three months — but never trade correctness for speed.
 
 ---
 
-## Startup: Detect Input & Load Language Context
+## Startup: Detect Input & Language
 
 ### Detect input type
 
@@ -84,7 +90,7 @@ Subagent: catalog
 Question: "How does this codebase handle {relevant concern from Phase 1}? What patterns, interfaces, and constraints exist that the new feature must respect?"
 Mode: full
 Scope: {areas of the codebase relevant to the feature being specified}
-Goal: Deep investigation of existing patterns, contracts, dependencies, and constraints relevant to this feature. Report findings with file:line references. Include historical context if the area has evolved significantly.
+Goal: Deep investigation of existing patterns, contracts, dependencies, and constraints relevant to this feature. Report findings with file:line references based on the current state of the code. Do not investigate git history or commits.
 ```
 
 Feed catalog's findings into Phase 2 — use them to:
@@ -223,15 +229,14 @@ Work through each area. For every area: present options with concrete tradeoffs,
 |------|-----------|
 | Core architecture | Always |
 | Public API shape (show exact signatures in code, not prose) | Always |
-| Error model (custom types, wrapping strategy, propagation) | Always |
-| Configuration (parameters, defaults with rationale, validation rules) | Always |
-| Behavioral contracts (flows, blocking vs non-blocking, lifecycle) | Always |
+| Error model | Always |
+| Behavioral contracts (flows, lifecycle) | Always |
 | Edge cases (empty input, nil/null, shutdown, concurrent calls) | Always |
+| Configuration | If the feature has tunable parameters |
 | Concurrency model | If concurrent access is possible |
 | Non-functional requirements | If thresholds were defined in Phase 1 |
 | Internal mapping (type translation, dependency mapping) | If crossing system boundaries |
 | Non-goals / explicit scope exclusions | Always |
-| Documentation deliverables | Always |
 
 ### 2.2 Evaluate any solution the user brought
 
@@ -256,10 +261,6 @@ For every key assumption underlying the chosen decisions:
 |---|---|---|---|
 
 Verify: every requirement from Phase 1 has at least one covering decision. If any requirement has no coverage, ask: was it intentionally dropped, or does it still need to be addressed?
-
-### 2.5 Re-run Decision Area Checklist
-
-Before the Phase 2 Gate, run through the Decision Area Checklist (2.1) one final time. For each area, verify that a concrete decision was made and confirmed by the user. If any mandatory area is still unresolved, address it now — do not proceed to Phase 3 with open decisions.
 
 ### Phase 2 Gate — confirm before proceeding
 
@@ -292,8 +293,8 @@ mkdir -p .covenant/specs
 4. Define every error explicitly: for each public function, list every possible error type and the condition that triggers it
 5. Specify defaults with evidence (e.g., "45s timeout — Kafka 3.0+ documentation recommendation")
 6. Address edge cases proactively: what happens with empty input? nil/null? on shutdown? under concurrent calls? on connection drop?
-7. **Do not add sections. Do not skip sections.** Every section in the template is mandatory unless marked [IF APPLICABLE]. If a section has no content, write `N/A — {reason}` rather than omitting it.
-8. Validate the completed spec against the Spec Validation Checklist (Section 9) before presenting it
+7. Use the template sections as a guide. Skip any section that does not apply — do not write `N/A` filler.
+8. Before presenting, sanity-check: every Phase 1 success criterion is traceable to a decision; every public function lists its error conditions; no banned qualifiers remain.
 
 ### Spec document template
 
@@ -481,20 +482,6 @@ Mark N/A if not applicable.}
 
 ---
 
-## 9. Spec Validation Checklist
-
-- [ ] RFC 2119 keywords used throughout (MUST / SHOULD / MAY / MUST NOT)
-- [ ] Every success criterion has a verification method
-- [ ] Every configurable parameter has a default and valid range
-- [ ] Every public function lists all possible error types and when they occur
-- [ ] No vague qualifiers remain ("flexible", "fast", "robust", etc.)
-- [ ] No undefined terms (all terms appear in Glossary)
-- [ ] No TBDs or unresolved placeholders
-- [ ] No contradictions between sections
-- [ ] Spec is self-contained: an implementer needs nothing else
-- [ ] All edge cases are addressed
-- [ ] Alternatives explored and rejection reasons documented
-- [ ] Requirements traceability: every Phase 1 requirement appears in the spec
 ```
 
 ---
@@ -546,11 +533,8 @@ If the input was a PRD, update the PRD phase status from `pending` to `in-progre
 
 ## Rules
 
-- **Never skip Phase 1.** The most common engineering mistake is solving the wrong problem.
-- **Never skip any Phase gate.** If a gate item is missing, stay in the current phase.
-- **Never make a unilateral decision.** Every design decision must be explicitly confirmed by the user before it is treated as decided.
-- **Never present an assumption as fact** without labeling it. Prefer "I need to validate X before deciding" over guessing.
-- **Never present a solution without evaluating its failure conditions.** "What happens when this fails under load?" is always a valid question.
-- **Do not fold under pushback without reason.** If your objection has merit, defend it with evidence. If the user provides a valid counter-argument, acknowledge it and move on.
-- **Actively kill paths that do not hold up.** Do not keep weak options alive to appear balanced.
-- **All communication in the user's language.**
+- Never skip Phase 1. Solving the wrong problem is the most common failure mode.
+- Confirm key design decisions explicitly with the user — no unilateral choices.
+- Label assumptions as assumptions; don't present them as fact.
+- Evaluate failure conditions for every solution.
+- Communicate in the user's language.

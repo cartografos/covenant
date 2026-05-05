@@ -7,8 +7,6 @@ argument-hint: "[path/to/scan] (blank = full repo)"
 
 **Input**: $ARGUMENTS (optional path to scope the scan)
 
-Check for language marker files and read `rules/common/security.md` + `rules/{lang}/security.md` before proceeding.
-
 Find bugs that hide in plain sight. Silent failures cause incidents with no logs, no alerts, and no obvious error — the system just does the wrong thing quietly.
 
 Run this on any codebase, any time. Especially valuable before merging code that touches error handling, async flows, or data pipelines.

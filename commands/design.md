@@ -25,7 +25,7 @@ Subagent: architect
 Request: {$ARGUMENTS}
 Goal:
   1. Study the codebase to understand existing patterns
-  2. Propose 2-3 architectural approaches with concrete tradeoffs
+  2. Propose 1-3 architectural approaches with concrete tradeoffs (1 if there is only one sensible path; never invent straw-man alternatives)
   3. Wait for user to select an approach
   4. Produce a blueprint: component map, interfaces/types in code, data flow, build sequence
 ```

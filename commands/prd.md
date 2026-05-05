@@ -27,10 +27,10 @@ You are a sharp product manager who:
 ## Process Flow
 
 ```
-INITIATE → FOUNDATION → GROUNDING → DEEP DIVE → TECHNICAL → DECISIONS → GENERATE → SUMMARY
+INITIATE → FOUNDATION → CONTEXT → DECISIONS → GENERATE
 ```
 
-Each phase builds on the previous. GATE lines require user response before continuing — never skip them.
+Each phase builds on the previous. GATE lines require user response. For lightweight features, you may merge CONTEXT into FOUNDATION if there is little to research.
 
 ---
 
@@ -70,89 +70,37 @@ Present all five questions at once. User may answer together.
 
 ---
 
-## Phase 3 — GROUNDING: Market & Context Research
+## Phase 3 — CONTEXT: Users, Market, and Technical Reality
 
-After receiving foundation answers, conduct research in parallel:
+Investigate in parallel only the dimensions relevant to this feature. Skip a dimension if it adds nothing.
 
-**Market research:**
-1. Find similar products or features in the market
-2. Identify how others solve this problem
-3. Note common patterns, anti-patterns, and known failure modes
-4. Check for recent trends or shifts in this space
+**Users & Vision** — ask only the questions still unanswered after Phase 2:
+- Primary user: role, daily context, trigger.
+- Job to Be Done: "When [situation], I want to [motivation], so I can [outcome]."
+- Non-users: who this is explicitly NOT for.
+- Hard constraints: time, budget, technical, regulatory.
 
-**Codebase research (if a project exists):**
-1. Find existing functionality relevant to this idea
-2. Identify patterns, components, or infrastructure that could be leveraged
-3. Note technical constraints or opportunities
+**Market** (skip if internal-only or trivially scoped):
+- How do others solve this? Common patterns, anti-patterns, known failure modes.
 
-**Summarize findings to user:**
-
-> **What I found:**
-> - {Market insight 1}
-> - {Competitor approach or gap}
-> - {Relevant codebase pattern, if applicable}
->
-> Does this change or refine your thinking?
-
-**GATE**: Brief pause for user input (can be "continue" or adjustments).
-
----
-
-## Phase 4 — DEEP DIVE: Vision & Users
-
-Based on foundation + research, ask:
-
-> **Vision & Users:**
->
-> 1. **Vision**: In one sentence, what is the ideal end state if this succeeds?
->
-> 2. **Primary User**: Describe your most important user — their role, daily context, and what triggers their need.
->
-> 3. **Job to Be Done**: Complete this: "When [situation], I want to [motivation], so I can [outcome]."
->
-> 4. **Non-Users**: Who is explicitly NOT the target? Who should this design ignore?
->
-> 5. **Constraints**: What hard limitations exist? (time, budget, technical, regulatory, org)
-
-**GATE**: Wait for user responses before proceeding.
-
----
-
-## Phase 5 — TECHNICAL: Feasibility Assessment
-
-**If a codebase exists**, run two parallel investigations:
-
-Investigation 1 — Feasibility:
-1. Identify existing infrastructure that can be leveraged
-2. Find similar patterns already implemented
-3. Map integration points and dependencies
-4. Locate relevant types, config, and test patterns
-
-Investigation 2 — Constraints:
-1. Trace how related features are implemented end-to-end
-2. Map data flow through potential integration points
-3. Identify architectural patterns and their boundaries
-4. Estimate complexity based on similar implemented features
+**Technical** (skip if no code exists yet):
+- Existing infrastructure or patterns to leverage.
+- Integration points, dependencies, architectural boundaries.
+- Feasibility: HIGH / MEDIUM / LOW with reason.
+- Key technical risk.
 
 **Summarize to user:**
 
-> **Technical Context:**
-> - **Feasibility**: {HIGH / MEDIUM / LOW} — because {reason}
-> - **Can leverage**: {existing patterns or infrastructure}
-> - **Key technical risk**: {main concern}
+> **What I found:**
+> - {1-3 bullets covering the dimensions you investigated}
 >
-> Any technical constraints I should know about?
+> Does this change your thinking? Any constraints I should know about?
 
-**If no codebase**, research technical approaches:
-1. Find how others have implemented this technically
-2. Identify common implementation patterns and pitfalls
-3. Note version-specific gotchas or ecosystem considerations
-
-**GATE**: Brief pause for user input before proceeding.
+**GATE**: Wait for user input before proceeding.
 
 ---
 
-## Phase 6 — DECISIONS: Scope & Approach
+## Phase 4 — DECISIONS: Scope & Approach
 
 Ask final clarifying questions before writing the PRD:
 
@@ -172,7 +120,7 @@ Ask final clarifying questions before writing the PRD:
 
 ---
 
-## Phase 7 — GENERATE: Write PRD
+## Phase 5 — GENERATE: Write PRD
 
 **Output path**: `.covenant/prds/{kebab-case-name}.prd.md`
 
@@ -326,45 +274,19 @@ When {situation}, I want to {motivation}, so I can {outcome}.
 
 ---
 
-## Phase 8 — SUMMARY: Report to User
+## Phase 6 — SUMMARY
 
-After saving the PRD, always display this summary:
+After saving the PRD, display:
 
 ```
 ## PRD Created
 
 **File**: `.covenant/prds/{name}.prd.md`
 
-### At a Glance
-| Field | Value |
-|-------|-------|
-| Problem | {one line} |
-| Solution | {one line} |
-| Primary Metric | {target and measurement method} |
-| Complexity | {Simple / Medium / Complex} |
-| MVP Phases | {N phases defined} |
-
-### Validation Status
-| Section | Status |
-|---------|--------|
-| Problem Statement | {Validated / Assumption} |
-| User Research | {Done / Needed} |
-| Technical Feasibility | {Assessed / TBD} |
-| Success Metrics | {Defined / Needs refinement} |
-| Hypothesis | {Clear / Vague} |
-
-### Open Questions ({N})
-{List each open question}
-
-### Recommended Next Step
-{One of: user research, technical spike, stakeholder review, proceed to spec}
-
-### Implementation Phases
-| # | Phase | Status | Parallel |
-|---|-------|--------|----------|
-{table rows from PRD}
-
----
-> To create a spec for the next pending phase:
-> `/covenant:spec .covenant/prds/{name}.prd.md`
+- **Problem**: {one line}
+- **Solution**: {one line}
+- **Primary Metric**: {target and measurement}
+- **MVP Phases**: {N}
+- **Open Questions**: {N — list inline if ≤3, otherwise just the count}
+- **Next Step**: {user research / technical spike / stakeholder review / `/covenant:spec`}
 ```
