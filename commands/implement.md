@@ -83,6 +83,8 @@ Implement following these rules:
 3. Respect the Types/Signatures as contracts — implement the bodies, do not change signatures
 4. Address every Implementation Note before marking the step done
 5. Handle all edge cases listed in the spec's Behavioral Contract (Section 4.2)
+6. **Documentation conventions follow `.covenant/style.md`** if it exists — that file is the source of truth for whether/how this project documents code (godoc, JSDoc, docstrings, plain comments, or none). Do not invent your own convention. If `.covenant/style.md` does not exist, mirror the commenting style of neighboring files in the project.
+7. **No spec/plan leakage into source code.** Do not write comments like `// SC-1`, `// implements MUST-2`, `// step 2.1`, `// see spec §4.2`, or any reference to spec sections, plan steps, requirement IDs, tickets, or PR numbers. The spec and plan are reference documents — they never become source-code comments.
 
 ### Step B — Verify Done-when
 

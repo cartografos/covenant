@@ -15,7 +15,9 @@ Invoked by `/covenant:implement` after the Arbiter review.
 
 ## Rules
 
-- Default to writing nothing. Only update docs that the current changes meaningfully impact.
+- **Source of truth for code-level docs is `.covenant/style.md`** if it exists. It captures whether this project documents exports, in what format (godoc, JSDoc, docstrings, plain), and what does not get documented. Follow it. If it does not exist, mirror the commenting style of neighboring files.
+- **Strip spec/plan/process leakage from code.** During or after implementation, scan the changed files for comments referencing spec sections, plan steps, requirement IDs (`SC-1`, `MUST-2`, `EC-3`), ticket numbers, PR numbers, or phrases like `"see spec section ..."` / `"implements requirement ..."`. Remove them. The source code is the artifact; the spec and plan are reference documents elsewhere.
+- Default to writing nothing new. Only update docs that the current changes meaningfully impact.
 - Document the WHY when it is non-obvious. If well-named code already conveys intent, do not add prose.
 - Touch only sections affected by the current changes. Never rewrite untouched sections.
 - Do not create new doc files unless the user asked for one or the project clearly already has the convention.
@@ -65,11 +67,13 @@ Produce only the updates from the assessment above. If nothing applies, report t
 
 ### Code Doc Comments
 
-Default to **no** doc comments. Add one only when the WHY is non-obvious — a hidden constraint, a subtle invariant, a workaround, behavior that would surprise a reader.
+Follow `.covenant/style.md` if it exists — that file documents this project's commenting convention (some projects godoc every export; some never use doc comments; some use JSDoc only on public API). Mirror it.
 
-Do not add comments to describe what the code does — well-named identifiers already do that. Do not write multi-line comment blocks. One short line max.
+If `.covenant/style.md` does not exist, default to **no** doc comments and add one only when the WHY is non-obvious — a hidden constraint, a subtle invariant, a workaround, behavior that would surprise a reader. One short line max.
 
-If you would add a comment that just paraphrases the function name, do not add it.
+In all cases:
+- Do not paraphrase what the code does — well-named identifiers already do that.
+- Do not embed spec/plan/requirement references in comments. If a comment cites `SC-1`, `MUST-2`, a plan step, a ticket, or a PR — delete it.
 
 ### CHANGELOG
 

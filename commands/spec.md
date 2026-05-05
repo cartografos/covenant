@@ -289,7 +289,7 @@ mkdir -p .covenant/specs
 
 1. Carry forward every output from Phases 1 and 2 — nothing is lost
 2. Search the web actively to validate claims, check library APIs, verify default values
-3. Write API contracts as real code: types, function signatures, doc comments, constants
+3. Write API contracts as real code: types, function signatures, constants. Use prose **outside** the code blocks to explain behavior and constraints — do not embed dense doc comments inside the snippets, since those snippets are illustrative for the spec reader, not text that should be copied into source files.
 4. Define every error explicitly: for each public function, list every possible error type and the condition that triggers it
 5. Specify defaults with evidence (e.g., "45s timeout — Kafka 3.0+ documentation recommendation")
 6. Address edge cases proactively: what happens with empty input? nil/null? on shutdown? under concurrent calls? on connection drop?
@@ -358,8 +358,8 @@ mkdir -p .covenant/specs
 ### 3.2 Types and Enums
 
 ```{language}
-// Full type definitions with doc comments
-// Show all fields with types, zero values, and constraints
+// Full type definitions — fields, types, zero values, constraints.
+// No prose doc comments inside the snippet; explain behavior in surrounding text.
 ```
 
 ### 3.3 Error Model
@@ -372,11 +372,10 @@ mkdir -p .covenant/specs
 ### 3.4 Primary API
 
 ```{language}
-// Every exported function/method with:
-// - Full signature
-// - Doc comment explaining behavior, not just name
-// - Error conditions listed explicitly
+// Every exported function/method with full signature only.
 ```
+
+For each function above, explain in prose (outside the code block): what it does, error conditions, and any non-obvious constraints. The implementer follows `.covenant/style.md` to decide how (or whether) to translate this prose into source-code comments — different languages and projects have different conventions.
 
 ### 3.5 Configuration
 
@@ -470,7 +469,7 @@ Mark N/A if not applicable.}
 
 ### 8.1 Critical Behaviors
 
-{Non-obvious behaviors that an implementer could easily get wrong. Reference spec sections.}
+{Non-obvious behaviors that an implementer could easily get wrong. Cross-link to the relevant spec sections in prose so the spec reader can navigate. These notes stay in the spec document — they are not instructions to embed in source-code comments.}
 
 ### 8.2 Dependency Initialization
 

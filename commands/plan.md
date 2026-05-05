@@ -254,13 +254,14 @@ After all steps complete, verify:
 
 **File(s)**: `{exact/path/to/file.ext}`
 
-**Types / Signatures**:
+**Types / Signatures** (pure code — no prose comments, no spec references):
 ```{language}
-// Full type definitions, function signatures, and doc comments
-// This is the contract — implementation fills in the body
+// Real type definitions and function signatures only.
+// No "implements SC-1", no "see spec section 4.2", no plan-step IDs.
+// Doc comments only if the project's .covenant/style.md says exports get them.
 ```
 
-**Implementation Notes**:
+**Implementation Notes** (metadata of the plan — does NOT go into the source code):
 - {Algorithmic detail or invariant that is non-obvious}
 - {Edge case that must be handled}
 - {Integration point with existing code}
@@ -280,6 +281,7 @@ After all steps complete, verify:
 - **Atomicity**: every step is independently verifiable and produces a concrete artifact
 - **Completeness**: the phases cover 100% of the work required by the spec — nothing left to "figure out during implementation"
 - **Precision**: types and signatures are real code, not prose
+- **No spec leakage in code snippets**: do not write `// SC-1`, `// MUST: ...`, `// see spec §4.2`, or step IDs inside the Types/Signatures block. The plan and spec are reference documents — they do not become source-code comments. Project documentation conventions live in `.covenant/style.md`.
 - **Ordering**: dependencies come before dependents
 - **No test specifications**: sentinel creates tests at runtime
 - **No documentation phase**: librarian handles documentation at runtime

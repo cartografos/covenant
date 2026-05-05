@@ -70,14 +70,29 @@ For each kind of identifier, find at least 3 examples and extract the pattern:
 - How are errors wrapped? Do they preserve a chain?
 - Are there shared error types/codes? Where do they live?
 
-### 7. Logging
+### 7. Documentation Style (in-code comments)
+
+This is critical — `/covenant:plan`, `/covenant:implement`, sentinel, and librarian all defer to this section to decide how to document new code.
+
+Capture, with at least 3 examples each:
+- **What gets documented**: only exported symbols? all public functions? nothing? specific kinds (interfaces, error types, public structs)?
+- **Format**: godoc (`// FuncName ...`), JSDoc (`/** ... */`), Rustdoc (`/// ...`), Python docstrings (`"""..."""`), plain `//` comments, none.
+- **Style and length**: one-line summary? full paragraph with examples? subject-first sentence?
+- **What does not get documented**: internal helpers, obvious getters, private fields, etc.
+- **Inline comments**: when does the project use them? Usually never, only for non-obvious WHY, or routinely?
+
+Show 2-3 representative snippets — including one example of an exported symbol that has documentation, and one that does not, to illustrate the rule.
+
+If the project has no documented convention (mixed or absent), say so explicitly: "No consistent documentation convention found — implementers should default to no doc comments and add one only when the WHY is non-obvious."
+
+### 8. Logging
 
 - Library used.
 - Levels actually used in the code.
 - Structured vs free-form messages.
 - Redaction rules visible in the code (anything explicitly stripped from logs).
 
-### 8. Testing
+### 9. Testing
 
 - Framework(s) and runner command.
 - File layout (`*_test.*` next to source? `tests/` folder? `__tests__/`?).
@@ -87,20 +102,20 @@ For each kind of identifier, find at least 3 examples and extract the pattern:
 - Integration vs unit separation.
 - Coverage tooling if configured.
 
-### 9. Configuration
+### 10. Configuration
 
 - How config is loaded (env vars, files, flags, layered).
 - Where defaults are defined.
 - Validation patterns.
 - Secrets handling.
 
-### 10. Dependencies
+### 11. Dependencies
 
 - Top 5-10 runtime dependencies with the role each plays in this codebase (not generic descriptions — what does THIS project use it for, based on imports).
 - Notable dev dependencies (test runners, linters, codegen).
 - Internal packages that act like libraries (anything under `internal/`, `pkg/`, `lib/`, `shared/`, `common/`).
 
-### 11. Patterns to Mirror
+### 12. Patterns to Mirror
 
 The 3-7 most important canonical patterns a contributor must follow. For each:
 - Short name
@@ -108,7 +123,7 @@ The 3-7 most important canonical patterns a contributor must follow. For each:
 - Source: `file:lines`
 - Real snippet (5-15 lines)
 
-### 12. Inconsistencies (optional)
+### 13. Inconsistencies (optional)
 
 If the survey found contradictions — two ways of doing the same thing — list them factually with file paths. No judgment about which is right.
 
@@ -149,6 +164,19 @@ Write the document to the path provided by the command.
 
 ## Error Handling
 {how errors are created, propagated, wrapped — with a real snippet}
+
+## Documentation Style
+- **What gets documented**: {exported only / all public / none / specific kinds}
+- **Format**: {godoc / JSDoc / Rustdoc / docstrings / plain `//` / none}
+- **Style**: {one-line summary / full paragraph / subject-first / etc.}
+- **What does not get documented**: {internal helpers / obvious getters / etc.}
+- **Inline comments**: {usual frequency and when}
+
+```{language}
+{representative snippet showing the convention}
+```
+
+> Implementers and librarian: this section is the source of truth for whether and how to document new code. Do not invent a different convention. Never embed spec/plan/requirement IDs in code comments.
 
 ## Logging
 {library, levels, format — with a real snippet, or "no logging found in scope"}
