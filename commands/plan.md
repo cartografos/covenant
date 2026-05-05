@@ -17,6 +17,14 @@ Generate a detailed, self-contained implementation plan from a specification. Ev
 
 If `.covenant/style.md` exists in the project, read it before any planning. It captures the project's de-facto conventions (naming, file layout, error handling, testing, programming style) and should be cited in the plan's "Patterns to Mirror" section instead of inventing patterns from scratch. If it does not exist, proceed without it — `catalog` will still surface patterns during Phase 2.
 
+**When the plan is a refactor** (the work intentionally changes one or more documented conventions), the plan must:
+1. Identify which convention(s) from `.covenant/style.md` are being deliberately changed.
+2. State the new convention and the rationale.
+3. Flag this as an **Intentional Deviation** in the Patterns to Mirror section so the implementer does not reflexively mirror the old pattern.
+4. Note that `/covenant:codify` should be re-run after the refactor lands so style.md reflects the new state.
+
+If the plan is additive (new feature on top of existing patterns), simply mirror style.md as usual.
+
 
 
 | Input Pattern | Action |
@@ -195,7 +203,7 @@ Keep the list short — only files an implementer truly cannot proceed without.
 
 ## Patterns to Mirror
 
-Code patterns discovered in this codebase. Follow these exactly.
+Code patterns discovered in this codebase. Follow these exactly **unless this plan declares an Intentional Deviation below**.
 
 ### NAMING_CONVENTION
 // SOURCE: {file:lines}
@@ -210,6 +218,16 @@ Code patterns discovered in this codebase. Follow these exactly.
 {actual code snippet}
 
 {add a section for each relevant pattern found in Phase 2}
+
+## Intentional Deviations (refactors only)
+
+{Omit this section unless the plan deliberately changes a current convention.}
+
+| Current Convention (per style.md) | New Convention | Rationale |
+|---|---|---|
+| {what the codebase does today} | {what this plan introduces} | {why the change} |
+
+After the refactor lands, run `/covenant:codify` to refresh `.covenant/style.md`.
 
 ## Project Conventions
 

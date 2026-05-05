@@ -136,7 +136,7 @@ Write the document to the path provided by the command.
 ```markdown
 # Project Coding Style
 
-> Derived from the codebase on {YYYY-MM-DD}. Descriptive — describes what the project does, not what it should do.
+> Derived from the codebase on {YYYY-MM-DD}. **Descriptive snapshot** — describes what the project does today, not what it should do. New work in established areas should mirror these patterns. Refactors that intentionally change a pattern should declare an Intentional Deviation in the plan and re-run `/covenant:codify` after landing.
 
 ## Project Map
 {tree + one-liners per top-level directory}

@@ -52,7 +52,7 @@ A step was just implemented. Create tests for the new behavior.
 **Test naming:**
 - Describe the **behavior under test** in natural language — `"returns ErrUnauthorized when the token has expired"`, not `"SC-1 — token expiry"`.
 - Do **not** put requirement IDs (`SC-1`, `MUST-2`, `EC-3`), spec section numbers, plan step IDs, ticket numbers, or PR numbers in test names, descriptions, or comments. The spec and plan are reference documents — they never appear in test sources.
-- Mirror the test naming convention already in use in this project. If `.covenant/style.md` exists, follow what it documents.
+- Mirror the test naming convention already in use in this project. If `.covenant/style.md` exists, follow what it documents — unless the plan declares an Intentional Deviation that changes test conventions, in which case follow the plan.
 
 ### Mode 2: Failing Tests
 

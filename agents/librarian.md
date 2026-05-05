@@ -15,7 +15,7 @@ Invoked by `/covenant:implement` after the Arbiter review.
 
 ## Rules
 
-- **Source of truth for code-level docs is `.covenant/style.md`** if it exists. It captures whether this project documents exports, in what format (godoc, JSDoc, docstrings, plain), and what does not get documented. Follow it. If it does not exist, mirror the commenting style of neighboring files.
+- **Source of truth for code-level docs is `.covenant/style.md`** if it exists, **except** when the plan declares an Intentional Deviation in its documentation convention (a refactor changing how the project documents code). In that case, follow the plan's new convention. After the change lands, the user should re-run `/covenant:codify` to refresh style.md. If neither exists, mirror the commenting style of neighboring files.
 - **Strip spec/plan/process leakage from code.** During or after implementation, scan the changed files for comments referencing spec sections, plan steps, requirement IDs (`SC-1`, `MUST-2`, `EC-3`), ticket numbers, PR numbers, or phrases like `"see spec section ..."` / `"implements requirement ..."`. Remove them. The source code is the artifact; the spec and plan are reference documents elsewhere.
 - Default to writing nothing new. Only update docs that the current changes meaningfully impact.
 - Document the WHY when it is non-obvious. If well-named code already conveys intent, do not add prose.
